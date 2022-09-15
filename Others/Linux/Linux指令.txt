@@ -1,0 +1,74 @@
+sudo apt-get install XXX #從網路下載名為XXX的安裝包
+sudo apt install XXX #從網路下載名為XXX的安裝包
+
+cd AAA/BBB #移動到AAA/BBB路徑底下
+cd /home/test/Documents #使用絕對路徑移動到Documents路徑底下(test是我的用戶名稱)
+cd .. #回到上一層路徑
+cd ../../ #回到上上一層路徑
+cd ~ #回到home目錄
+
+touch file1 #創造名為file1的文字檔
+touch file1 file2 file3 #一次創造名為file1、file2、file3的文字檔
+
+ls #看當前目錄下所有文件
+ls -l #看當前目錄下所有文件的全部資訊
+ls -a #顯示前目錄下所有的隱藏文件(.開頭的檔案)
+
+cp oldfile newfile #將oldfile檔案複製到目標路徑並改名為newfile
+cp file1 file2 folder1 #將file1、file2檔案同時複製到folder1資料夾
+cp -r folder1 folder2 #將folder1資料夾所有檔案遞迴的複製到folder2資料夾
+cp file* folder #將以file開頭的檔案複製到folder資料夾
+cp *4 folder #將以4結尾的檔案複製到folder資料夾
+
+mv file1 folder1 #將file1檔案移動到folder1資料夾
+mv file1 file1rename #將file1檔案更名為file1rename
+
+mkdir folder3 #創造名為folder3的資料夾
+rmdir folder3 #刪除名為folder3的資料夾
+
+rm file1 #刪除名為file1的文件
+rm * #刪除路徑底下所有文件
+rm -i f1 f2 f3 f4 #互動刪除指定文件
+rm -r folder3 #遞迴的刪除folder3資料夾內的東西(folder3也會被刪除)
+rm / #刪除電腦所有文件
+
+nano t.py #編輯t.py檔案
+Ctrl+x # 離開編輯
+
+cat t.py #顯示t.py檔案裡面的文字
+cat t.py > t1.py #將t.py檔案裡面的文字完全覆寫到t1.py
+cat 1.py 2.py > 3.py #將1.py、2.py的文字合併並寫入3.py
+cat t.py >> t1.py #將t.py的文字寫入到t1.py的後面
+
+chmod (u:使用者、g:團體、o:其他人、a:全部人)(r:可讀性、w:可寫性、x:可執行)
+chmod u+r 1.py #1.py檔案為使用者(u)增加可讀性(r)權限
+chmod a-x 1.py #1.py檔案為全部人(a)減去可執行(x)權限
+chmod ug-x 1.py #1.py檔案為使用者(u)、團體(g)減去可執行(x)權限
+chmod ug-wx 1.py #1.py檔案為使用者(u)、團體(g)減去可寫性(w)、可執行(x)權限
+讓3.py檔案可以直接執行的方式:
+1. chmod u+x 3.py #3.py檔案為使用者(u)增加可執行(x)權限
+2. nano 3.py #在3.py加上一行(#!/usr/bin/python3)讓它直接找到執行該檔案的工具
+3. ./3.py #直接在Terminal執行3.py(要加上./)
+
+ssh server連線相關
+方法1:
+1. 設定oracle vm virtualbox的網路，把NAT改成橋接介面卡
+2. sudo apt install openssh-server #在linux裝置上打這行，遠端linux用
+3. sudo apt install net-tools #為了使用ifconfig指令
+4. ifconfig #查詢裝置IP位置(找到inet後面的IP就是啦)
+
+遠端連線相關(VNC)
+sudo apt-get install x11vnc
+x11vnc -storepasswd #設定VNC連線的密碼
+x11vnc -usepw #啟動VNC並可提供外部裝置連線
+x11vnc -usepw -forever #啟動VNC並可提供外部裝置連線(永久連線模式)
+另外要讓想連過去的裝置下載VNC Client才行
+
+遠端計算相關
+ssh test@test-VirtualBox #直接在Windows的cmd打ssh+目標名稱
+ssh test@test-VirtualBox python3 < 1.py #讓本地端的1.py檔案被遠端目標執行。即本地端寫文件，目標端消耗資源幫你計算結果
+scp a.py b.py test@test-VirtualBox:~/Desktop/ #將本地端的a.py和b.py檔案複製到目標端的~/Desktop/路徑下
+ssh test@test-VirtualBox "python3 ~/Desktop/a.py" #遠端目標並在目標Terminal打出python3 ~/Desktop/a.py指令(用來執行已經被傳送過去的a.py和b.py檔案)
+scp test@test-VirtualBox:~/Desktop/b.py c.py #把遠端的b.py丟回到本地端並改名為c.py(通常用於回傳結果)
+ssh test@test-VirtualBox "export DISPLAY=:0; firefox" #打開遠端目標的firefox瀏覽器
+ssh test@test-VirtualBox "export DISPLAY=:0; python3 reinforcement_learning.py" #打開遠端目標的瀏覽器並執行reinforcement_learning.py檔案(如果該檔案需要瀏覽器才能運作的話)
