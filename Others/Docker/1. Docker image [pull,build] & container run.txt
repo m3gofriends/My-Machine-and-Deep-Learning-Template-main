@@ -1,0 +1,43 @@
+sudo docker image pull node:8.16.1 #從DockerHub把"node:8.16.1"image下載下來
+sudo docker image ls #檢視當前所有的docker image
+---------------------------
+nano helo.js #為了證明即使當前裝置沒有相關語言的編譯器也是可以執行的
+console.log("Hello")
+----------------------------
+nano Dockerfile
+FROM node:8.16.1
+
+RUN mkdir /src
+
+COPY helo.js /src
+
+CMD ["node", "/src/helo.js"]
+----------------------------
+sudo docker image build -t test/mynode:v01 . #編譯建立我們的運行環境(-t:tag、test/mynode:image名稱、v01:子標籤名、最後的"."表示在當前目錄進行)
+sudo docker image ls #檢查是否存在名為test/mynode的image檔案
+----------------------------
+sudo docker container run test/mynode:v01 #在環境中執行test/mynode:v01裡面的內容
+Hello
+----------------------------
+
+Git提交
+git add .
+git commint -m "mynode1"
+git push
+git tag v01
+git push origin v01
+
+接著在Docker Hub上操作
+1.Create Repository(名稱隨意，例子mynode、Public、Build Settings跟GitHub綁定)
+2.去Builds
+3.點擊Automated Builds裡面的Trigger去編譯image
+
+sudo docker image pull XXX/mynode:latest #從Docker Hub上去下載剛編譯完的雲端image文件(XXX指的是當前的帳號名稱)
+sudo docker image ls #檢查是否存在名為XXX/mynode且TAG為latest的image檔案
+----------------------------
+sudo docker container run XXX/mynode:latest #在環境中執行XXX/mynode:latest裡面的內容
+Hello
+----------------------------
+sudo docker image pull XXX/mynode:v01 #從Docker Hub上去下載剛編譯完的雲端image文件(XXX指的是當前的帳號名稱)
+sudo docker image ls #檢查是否存在名為XXX/mynode且TAG為v01的image檔案
+sudo docker container run XXX/mynode:v01 #在環境中執行XXX/mynode:v01裡面的內容
