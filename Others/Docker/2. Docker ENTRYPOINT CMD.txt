@@ -1,0 +1,39 @@
+sudo docker pull node:latest #取得最新版本的node.js鏡像
+sudo docker image ls #查看是否存在node:latest的image檔案
+sudo docker container run node:latest ls /etc/ #在node:latest裡面執行"ls /etc/"指令
+sudo docker container run node:latest cat /etc/hosts #在node:latest裡面執行"cat /etc/hosts"指令
+sudo docker container run node:latest cat /etc/os-release #在node:latest裡面執行"cat /etc/os-release"指令
+sudo docker container run node:latest node -v #在node:latest裡面執行"node -v"指令，查看node版本號
+mkdir latestnode
+cd latestnode/
+-----------------------
+nano Dockerfile
+FROM node:latest
+
+ENTRYPOINT ["node"]
+CMD [""]
+-----------------------(ENTRYPOINT ["node"]的意思是默認執行node指令，不可用其他指令蓋過去，會報錯。這樣原本要打node -v查看版本號，變成只要打-v就能查看)
+sudo docker image build -t mynode:latest .
+sudo docker image ls
+-----------------------
+sudo docker container run mynode:latest -v
+v18.9.0
+-----------------------
+sudo docker container run mynode:latest -help
+-----------------------
+nano Dockerfile
+FROM node:latest
+
+ENTRYPOINT ["node"]
+CMD ["-v"]
+-----------------------(CMD ["-v"]的意思是默認執行node -v的指令，但可以用其他指令蓋過去，像是用-help就可以把node -v蓋掉變成執行node -help)
+sudo docker image build -t mynode:latest .
+-----------------------
+sudo docker container run -it mynode:latest
+v18.9.0
+-----------------------
+sudo docker container run -it mynode:latest -help
+-----------------------
+sudo docker container run -it mynode:latest -e "console.log('helo')"
+helo
+-----------------------
