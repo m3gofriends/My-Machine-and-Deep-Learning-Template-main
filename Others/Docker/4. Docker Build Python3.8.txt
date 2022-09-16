@@ -1,0 +1,35 @@
+sudo docker pull python:3.8.0-alpine3.10
+sudo docker image ls
+sudo docker container run --rm -it python:3.8.0-alpine3.10 #--rm意思就是執行完就刪除container
+sudo docker container run --rm -it python:3.8.0-alpine3.10 python -V #Python版本確認
+sudo docker container run --rm -it python:3.8.0-alpine3.10 pip -V #pip版本確認
+sudo docker container run --rm -it python:3.8.0-alpine3.10 cat /etc/os-release
+mkdir python
+cd python/
+------------------------------------
+nano main.py
+
+import numpy as np
+myarray = np.array([1,2,3,4,5])
+print(myarray)
+------------------------------------
+sudo docker container run --rm -it -v /home/test/python:/workfolder:ro python:3.8.0-alpine3.10 python /workfolder/main.py 
+#"-v /home/test/python:/workfolder:ro"本地文件夾映射到虛擬環境的文件夾，並且是read only屬性(ro)。
+#此時會報錯，因為環境沒有numpy，所以要從python:3.8鏡像檔案去安裝numpy
+------------------------------------
+nano Dockerfile
+
+FROM python:3.8
+
+RUN pip3 install numpy
+RUN mkdir -p /workfolder
+COPY ./main.py /workfolder/
+CMD ["python", "/workfolder/main.py"]
+------------------------------------ #在container新建一個workfolder資料夾，然後把本地端的main.py送到workfolder裡。默認執行"python /workfolder/main.py"指令
+sudo docker image build -t mypython:v01 .
+sudo docker image ls
+------------------------------------
+sudo docker container run --rm -it mypython:v01
+[1 2 3 4 5]
+------------------------------------
+
