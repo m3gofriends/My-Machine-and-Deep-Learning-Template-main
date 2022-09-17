@@ -1,0 +1,39 @@
+sudo docker pull postgres:9.6.16-alpine
+sudo docker image ls
+sudo docker run --name webdb -p 5432:5432 -e POSTGRES_USER=dbuser -e POSTGRES_PASSWORD=12345678 -d postgres:9.6.16-alpine (-e:設定環境變數)
+sudo docker container ls
+sudo apt install nmap
+nmap 127.0.0.1 #掃描目標端口狀態
+sudo apt install postgresql-client-common
+sudo apt install postgresql-client
+-----------------------------------
+psql -h  localhost -U dbuser (-h:host name、-U:user name)
+select * from pg_tables;
+\q
+----------------------------------- #"select * from pg_tables;":看當前目錄下的系統表、"\q":quit
+sudo docker container ls
+sudo docker stop webdb
+nmap 127.0.0.1
+sudo docker container ls
+sudo docker container ls -a
+sudo docker start webdb
+sudo docker container ls
+----------------------------------- #"sudo docker exec -it webdb /bin/bash":進入webdb的shell模式
+sudo docker exec -it webdb /bin/bash
+cd /var/lib/postgresql/data
+ls
+cat pg_hba.conf
+cat postgresql.conf
+exit
+-----------------------------------
+sudo docker volume ls #使用volume的話當container被刪除後資料還會留著，系統會默認生成一個名為"local"的volume，讓資料被保存
+sudo docker volume create --name v_webdb_data #建立一個自己的volume，名為"v_webdb_data"
+sudo docker volume ls
+sudo docker volume inspect v_webdb_data #查看v_webdb_data的內部細節
+sudo docker stop webdb
+sudo docker container rm webdb
+sudo docker container ls -a
+sudo docker run --name webdb -v v_webdb_data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_USER=dbuser -e POSTGRES_PASSWORD=12345678 -d postgres:9.6.16-alpine
+#"-v v_webdb_data:/var/lib/postgresql/data":使用v_webdb_data這個volume，並且綁定到container的"/var/lib/postgresql/data"目錄底下來保存該目錄的內容
+sudo docker inspect webdb #查看webdb的內部細節，可以在volume那邊找到v_webdb_data的相關細節
+
