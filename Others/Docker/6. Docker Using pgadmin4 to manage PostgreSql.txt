@@ -1,0 +1,10 @@
+sudo docker pull dpage/pgadmin4:4.16
+sudo docker image ls
+sudo docker run --name pgamin4 -p 8080:80 \
+-e 'PGADMIN_DEFAULT_EMAIL=admin@test.com'  \
+-e 'PGADMIN_DEFAULT_PASSWORD=12345678'  \
+-d dpage/pgadmin4:4.16
+#此時打開linux的瀏覽器，輸入"localhost:8080"或"127.0.0.1:8080"就可以進入pgamin4管理頁面，帳號密碼輸入上方提供的就可以登入了
+sudo docker container ls
+sudo docker stop pgadmin4
+sudo docker start pgadmin4
