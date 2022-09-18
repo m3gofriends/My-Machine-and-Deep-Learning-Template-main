@@ -1,0 +1,74 @@
+sudo curl -L https://github.com/docker/compose/releases/download/v2.10.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose #到Github下載docker compose的linux版本然後下載到本地的"/usr/local/bin/docker-compose"
+sudo chmod +x /usr/local/bin/docker-compose #賦予docker-compose可執行(x)
+---------------------------------------------------
+sudo docker-compose --version
+Docker Compose version v2.10.0
+---------------------------------------------------
+sudo rm /usr/local/bin/docker-compose #刪除docker-compose的方法，如果需要
+mkdir work
+cd work
+---------------------------------------------------
+nano main.py
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():	
+    return 'Hello, Flask.'
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True, port=5000)
+--------------------------------------------------- #"port=5000":執行端口號為5000。這是container內的端口號，不是外部的端口號
+nano requirements.txt
+
+flask==2.1.0
+---------------------------------------------------
+nano Dockerfile
+
+FROM python:3.8.3-alpine3.12
+
+ADD . /app #將當前目錄映射到容器內的app目錄
+
+WORKDIR /app #設定app目錄為工作目錄
+
+RUN pip install -r requirements.txt #安裝python依賴包
+
+CMD python main.py #啟動flask應用服務
+---------------------------------------------------
+sudo docker build -t test/myweb:0.1 . #建立flask服務鏡像
+sudo docker image ls
+sudo docker container run --name myweb -d -p 8088:5000 test/myweb:0.1 #"-p 8088:5000":外部8088端口映射到container的5000端口(5000端口為flask設定的)
+sudo docker container ls
+---------------------------------------------------
+curl http://127.0.0.1:8088
+Hello, Flask.
+---------------------------------------------------
+sudo docker container prune
+---------------------------------------------------
+nano docker-compose.yml
+
+version: '3.8'
+services:
+ myweb:
+  build: .
+  ports: 
+  - "8088:5000"
+  volumes: 
+  - .:/app
+---------------------------------------------------
+sudo docker-compose up -d --build #容器每次運行都會重新編譯
+sudo docker-compose ps #查詢容器狀態
+---------------------------------------------------
+curl http://127.0.0.1:8088
+Hello, Flask.
+---------------------------------------------------
+sudo docker-compose run myweb top #查看docker-compose內myweb的程序運行狀態
+sudo docker-compose logs -f myweb #輸出日誌內容(docker-compose)
+sudo docker logs -f work-myweb-1 #輸出日誌內容(docker)
+sudo docker-compose stop #docker-compose停止
+sudo docker-compose ps
+sudo docker-compose down #docker-compose停止+清除(容器+網路)
+sudo docker-compose ps
+sudo docker-compose down --rmi all #docker-compose停止+清除(容器+網路+鏡像)
