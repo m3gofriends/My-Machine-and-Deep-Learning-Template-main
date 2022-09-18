@@ -1,0 +1,24 @@
+sudo docker pull redis:6.0.5-alpine
+sudo docker image ls
+sudo docker volume create --name v_redis_data
+sudo docker volume ls
+sudo docker run --name redis1 -v v_redis_data:/data -p 6379:6379 -d redis:6.0.5-alpine redis-server --appendonly yes --requirepass 12345678
+#"--appendonly yes":讓內部資料持久化設定、"--requirepass 12345678":設定安全密碼12345678
+sudo docker container ls
+sudo apt install net-tools
+netstat -nltp #確認本地啟動的tcp端口號
+sudo docker exec -it redis1 top #查看redis1正在運行的程序
+sudo apt install redis-tools
+-------------------------------------------
+redis-cli -h 127.0.0.1 -p 6379 -a 12345678
+ping #輸出PONG，說明連線成功
+info
+set data01 "helo, redis." #設定緩存服務器data01
+get data01 #輸出"helo, redis."
+set data02 "123."
+get data02
+keys * #查看目前緩存服務器都存在哪些資訊
+#1) "data01"
+#2) "data02"
+exit
+-------------------------------------------
