@@ -1,0 +1,59 @@
+cd work
+--------------------------------------------------------
+nano main.py
+
+from flask import Flask
+from redis import Redis
+
+app = Flask(__name__)
+redis = Redis(host='myredis', port=6379) #因為在docker compose裡面會動態分配IP，所以不能寫固定IP位置，所以用一個隨便的名稱代替
+
+@app.route('/')
+def hello():
+  redis.incr('hits') #連接redis服務器，找到hits這個變數，然後把它加1
+  return 'Hi, We meet %s time(s).' % redis.get('hits')
+  
+if __name__ == "__main__":
+  app.run(host="0.0.0.0", debug=True, port=5000)
+--------------------------------------------------------
+nano requirements.txt
+
+flask==2.1.0
+redis==3.5.3
+--------------------------------------------------------
+nano Dockerfile
+
+FROM python:3.8.3-alpine3.12
+
+ADD . /app
+
+WORKDIR /app
+
+RUN pip install -r requirements.txt
+
+CMD python main.py
+--------------------------------------------------------
+nano docker-compose.yml
+
+version: '3.8'
+services:
+ myweb:
+  build: .
+  ports:
+  - "8088:5000"
+  volumes:
+  - .:/app
+  depends_on:
+  - myredis #myweb依賴myredis服務
+ myredis:
+  image: redis:6.0.5-alpine
+--------------------------------------------------------
+sudo docker-compose up -d --build
+sudo docker image ls
+sudo docker-compose ps
+netstat -nltp
+--------------------------------------------------------
+curl http://127.0.0.1:8088
+Hi, We meet b'1' time(s).
+--------------------------------------------------------
+
