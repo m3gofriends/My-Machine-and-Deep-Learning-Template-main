@@ -1,0 +1,61 @@
+sudo docker pull node:12.18.1-buster
+sudo docker image ls
+cd work
+mkdir src
+---------------------------------------
+nano Dockerfile
+
+FROM node:12.18.1-buster    
+
+ADD ./src /app #把本機的src資料夾加到容器當中的app資料夾下
+
+WORKDIR /app
+
+ENV DEBCONF_NOWARNINGS yes
+
+RUN apt-get update -y && \  #在此添加需要的library     
+    apt-get upgrade -y && \
+    apt-get install -y \
+        build-essential -y \
+        curl \
+        nmap \ 
+        git \ 
+        nano \
+    && rm -rf /var/lib/apt/lists/* #容器生成完，刪除不必要的library  
+
+RUN npm install -g @vue/cli@4.4.6
+---------------------------------------
+sudo docker image build -t test/vuecli4:0.1 .
+sudo docker image ls
+sudo docker container run -it --name vuecli4 -v `pwd`/src:/app -p 8080:8080 -d test/vuecli4:0.1
+sudo docker container ls
+---------------------------------------
+sudo docker exec -it vuecli4 /bin/bash
+vue -V
+nano ~/.bashrc
+
+export LS_OPTIONS='--color=auto' #添加需要的工具
+alias ls='ls $LS_OPTIONS'
+alias ll='ls $LS_OPTIONS -l'
+alias l='ls $LS_OPTIONS -lA'
+
+exit
+sudo docker exec -it vuecli4 /bin/bash
+ll
+nano ~/.vuerc
+
+{
+ "useTaobaoRegistry": false,
+ "packageManager": "npm"
+}
+
+vue create myweb
+cd myweb
+npm run serve
+---------------------------------------
+(Open another Termianl)
+cd work/src/
+ll
+cd myweb/
+ll
+curl http://127.0.0.1:8088
