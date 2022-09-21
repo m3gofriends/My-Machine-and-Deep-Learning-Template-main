@@ -1,0 +1,12 @@
+sudo apt-get install postgresql
+--------------------------------------------------------
+psql --version
+
+psql (PostgreSQL) 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1)
+--------------------------------------------------------
+nmap 127.0.0.1
+
+PORT     STATE SERVICE
+22/tcp   open  ssh
+5432/tcp open  postgresql
+--------------------------------------------------------
