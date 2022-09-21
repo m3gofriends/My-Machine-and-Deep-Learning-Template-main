@@ -1,0 +1,21 @@
+sudo su postgres #切換到PostgreSql提供的postgres用戶下進行PostgreSql的相關操作
+
+cd #回到postgres的根目錄
+pwd #查看當前路徑
+psql -l #查看已經存在的數據庫
+createdb testdb #創建數據庫，取名為"testdb"
+psql -l
+
+psql testdb #進入testdb數據庫
+help
+\h #查看SQL指令
+\? #查看psql指令
+\l #查看已經存在的數據庫
+\q #退出postgres
+psql testdb
+select now(); #查看當前時間，輸出2022-09-21 15:04:30.832211+08
+select version(); #查看當前數據庫版本號，輸出PostgreSQL 12.12 (Ubuntu 12.12-0ubuntu0.20.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0, 64-bit
+
+\q
+dropdb testdb #刪除testdb數據庫
+psql -l
