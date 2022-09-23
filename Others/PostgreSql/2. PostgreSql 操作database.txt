@@ -1,0 +1,20 @@
+sudo su postgres
+createdb testdb
+psql -l
+psql testdb
+> create table posts (title varchar(255), content text); 
+#建立一個table，名為posts。存在兩個名稱，title varchar(255)類型字串長度最長255、content text類型字串長度不限但效率低
+> \dt #查看當前table
+> \d posts #查看posts這個table的具體訊息
+> alter table posts rename to testports; #把posts這個table改名為testports
+> drop table testports; #刪除testports這個table
+> \dt
+> \q
+-------------------------------------------------------
+nano db.sql
+
+create table posts (title varchar(255), content text);
+-------------------------------------------------------
+psql test
+> \i db.spl #導入(import)db.spl並執行
+> \dt
