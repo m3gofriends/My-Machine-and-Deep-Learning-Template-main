@@ -1,0 +1,41 @@
+sudo su postgres
+psql testdb
+> \dt
+> \d posts
+
+> insert into posts (title, content) values ('', '');
+ERROR:  new row for relation "posts" violates check constraint "posts_content_check"
+#因為輸入content的字串長度不大於8所以報錯
+
+> insert into posts (title, content) values (NULL, '');
+ERROR:  null value in column "title" violates not-null constraint
+#因為輸入title的字串為空(NULL)所以報錯
+
+> insert into posts (title, content) values ('title1', 'content11');
+INSERT 0 1
+#成功
+
+> select * from posts; #查看posts這個Table的所有內容
+ id | title  |  content  | is_draft | is_del |        create_date         
+----+--------+-----------+----------+--------+----------------------------
+  3 | title1 | content11 | t        | f      | 2022-09-24 11:39:55.284423
+(1 row)
+
+> insert into posts (title, content) values ('title2', 'content2');
+ERROR:  new row for relation "posts" violates check constraint "posts_content_check"
+
+> insert into posts (title, content) values ('title2', 'content22');
+INSERT 0 1
+
+> insert into posts (title, content) values ('title3', 'content33');
+INSERT 0 1
+
+> select * from posts;
+ id | title  |  content  | is_draft | is_del |        create_date         
+----+--------+-----------+----------+--------+----------------------------
+  3 | title1 | content11 | t        | f      | 2022-09-24 11:39:55.284423
+  5 | title2 | content22 | t        | f      | 2022-09-24 11:39:55.284423
+  6 | title3 | content33 | t        | f      | 2022-09-24 11:39:55.284423
+(3 rows)
+
+
