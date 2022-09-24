@@ -1,0 +1,22 @@
+sudo su postgres
+psql testdb
+> \dt
+> drop table posts;
+> \dt
+> \q
+---------------------------------------------
+nano db.sql
+
+create table posts(
+    id serial primary key, #serial:序列類型，primary key(主鍵):不能為空，且不能重複
+    title varchar (255) not null,
+    content text check(length(content) > 8),  #check:自行設置條件。check(length(content) > 8):字串長度必須大於8才允許追加
+    is_draft boolean default TRUE,
+    is_del boolean default FALSE,
+    create_date timestamp default 'now'
+); 
+---------------------------------------------
+psql testdb
+> \i db.sql
+> \dt
+> \d posts
