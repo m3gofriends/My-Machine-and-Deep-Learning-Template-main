@@ -1,0 +1,65 @@
+sudo su postgres
+psql testdb
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from users where score > 21;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+
+
+> select * from users where score < 30;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+
+> select * from users where score > 21 and score < 30;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+
+> select * from users where team = 'team3';
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+
+> select * from users where team != 'team3';
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from users where player like 'C%';
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+  6 | CJ     |  20.3 | team6
+
+> select * from users where player like 'C_';
+ id | player | score | team  
+----+--------+-------+-------
+  6 | CJ     |  20.3 | team6
+
