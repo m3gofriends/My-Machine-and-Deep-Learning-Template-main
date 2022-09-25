@@ -1,0 +1,30 @@
+sudo su postgres
+nano init.sql
+--------------------------------------------------
+create table users (
+    id serial primary key,
+    player varchar(255) not null,
+    score real, 
+    team varchar(255)
+);
+
+insert into users (player, score, team) values
+('Hank', 28.3, 'team1'),
+('Tim', 30.2, 'team2'),
+('Chris', 24.5, 'team3'),
+('Joy', 23.4, 'team4'),
+('Alice', 21.1, 'team5'),
+('CJ', 20.3, 'team6');
+--------------------------------------------------
+psql testdb
+> \i init.sql
+CREATE TABLE
+INSERT 0 6
+
+> \dt
+> \d users
+> select * from users; #顯示users這個Table的所有東西
+> \x #縱向顯示開啟
+> select * from users;
+> \x #再打一次變縱向顯示關閉
+> select player, score from users; #只顯示users這個Table的player和score
