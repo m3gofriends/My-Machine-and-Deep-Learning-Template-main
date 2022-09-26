@@ -1,0 +1,74 @@
+sudo su postgres
+psql testdb
+> select * from users order by score asc; #升序:順序從小到大
+ id | player | score | team  
+----+--------+-------+-------
+  6 | CJ     |  20.3 | team6
+  5 | Alice  |  21.1 | team5
+  4 | Joy    |  23.4 | team4
+  3 | Chris  |  24.5 | team3
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  
+> select * from users order by score desc; #降序:順序從大到小
+ id | player | score | team  
+----+--------+-------+-------
+  2 | Tim    |  30.2 | team2
+  1 | Hank   |  28.3 | team1
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from users order by team;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from users order by team, score;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+  
+> select * from users order by team, score desc;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from users order by score desc limit 3; #輸出最多3項數據
+ id | player | score | team  
+----+--------+-------+-------
+  2 | Tim    |  30.2 | team2
+  1 | Hank   |  28.3 | team1
+  3 | Chris  |  24.5 | team3
+
+> select * from users order by score desc limit 3 offset 1; #偏移一個數據(因為是降序，然後偏移一個，所以最大那個不顯示，只顯示2、3、4名)
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  
+> select * from users order by score desc limit 3 offset 2; #偏移兩個數據，只顯示3、4、5名
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  
+
