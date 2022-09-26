@@ -1,0 +1,80 @@
+sudo su postgres
+psql testdb
+> select team from users;
+ team  
+-------
+ team1
+ team2
+ team3
+ team4
+ team5
+ team6
+
+> select distinct team from users; #只找不同的team名稱，但我的team都不同，看不出差異
+ team  
+-------
+ team5
+ team6
+ team4
+ team2
+ team3
+ team1
+
+> select sum(score) from users; #計算score總和
+  sum  
+-------
+ 147.8
+
+> select max(score) from users; #找最大score
+ max  
+------
+ 30.2
+
+> select min(score) from users; #找最小score
+ min  
+------
+ 20.3
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from users where score = (select max(score) from users); #找出score最大的詳細數據
+ id | player | score | team  
+----+--------+-------+-------
+  2 | Tim    |  30.2 | team2
+  
+> select * from users where score = (select min(score) from users); #找出score最小的詳細數據
+ id | player | score | team  
+----+--------+-------+-------
+  6 | CJ     |  20.3 | team6
+
+> select team, max(score) from users group by team; #找出每個team裡面score最大的那個
+ team  | max  
+-------+------
+ team5 | 21.1
+ team6 | 20.3
+ team4 | 23.4
+ team2 | 30.2
+ team3 | 24.5
+ team1 | 28.3
+ 
+> select team, max(score) from users group by team having max(score) >= 25; #找出每個team裡面score最大的那個，且只顯示score大於等於25的數據
+ team  | max  
+-------+------
+ team2 | 30.2
+ team1 | 28.3
+
+> select team, max(score) from users group by team having max(score) >= 25 order by max(score); #找出每個team裡面score最大的那個，且只顯示score大於等於25的數據，並且對score做升序排列
+ team  | max  
+-------+------
+ team1 | 28.3
+ team2 | 30.2
+
+
