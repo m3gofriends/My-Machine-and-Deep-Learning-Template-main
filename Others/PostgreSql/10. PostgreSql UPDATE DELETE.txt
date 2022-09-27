@@ -1,0 +1,48 @@
+sudo su postgres
+psql testdb
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> update users set score = 80.0 where player = 'CJ';
+UPDATE 1
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |    80 | team6
+  
+> update users set score = score + 200 where team = 'team2';
+UPDATE 1
+
+> select * from users order by team;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    | 230.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |    80 | team6
+
+> delete from users where score > 25;
+DELETE 3
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+
