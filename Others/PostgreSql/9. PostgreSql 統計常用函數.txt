@@ -1,0 +1,93 @@
+sudo su postgres
+psql testdb
+> select player, length(player) from users;
+ player | length 
+--------+--------
+ Hank   |      4
+ Tim    |      3
+ Chris  |      5
+ Joy    |      3
+ Alice  |      5
+ CJ     |      2
+
+> select player, concat(player, '/', team) from users;
+ player |   concat    
+--------+-------------
+ Hank   | Hank/team1
+ Tim    | Tim/team2
+ Chris  | Chris/team3
+ Joy    | Joy/team4
+ Alice  | Alice/team5
+ CJ     | CJ/team6
+ 
+> select player, concat(player, '/', team) as "information" from users; #把先前的concat函數名稱改為information
+ player | information 
+--------+-------------
+ Hank   | Hank/team1
+ Tim    | Tim/team2
+ Chris  | Chris/team3
+ Joy    | Joy/team4
+ Alice  | Alice/team5
+ CJ     | CJ/team6
+
+> select substring(player, 1, 3) as "Player first name" from users; #拿出player的子字串，從第一個字到第三個字，並將column名稱改為Player first name
+ Player first name 
+-------------------
+ Han
+ Tim
+ Chr
+ Joy
+ Ali
+ CJ
+
+> select concat('PLAYER:', substring(player, 1, 3)) as "Player first name" from users;
+ Player first name 
+-------------------
+ PLAYER:Han
+ PLAYER:Tim
+ PLAYER:Chr
+ PLAYER:Joy
+ PLAYER:Ali
+ PLAYER:CJ
+
+> select random(); #SQL的隨機函數
+       random        
+---------------------
+ 0.37796106841130594
+
+> select random();
+       random       
+--------------------
+ 0.9448854496867227
+ 
+> select * from users order by random(); #SQL的隨機函數用於Table排序
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  1 | Hank   |  28.3 | team1
+  6 | CJ     |  20.3 | team6
+  5 | Alice  |  21.1 | team5
+  2 | Tim    |  30.2 | team2
+
+> select * from users order by random();
+ id | player | score | team  
+----+--------+-------+-------
+  4 | Joy    |  23.4 | team4
+  3 | Chris  |  24.5 | team3
+  1 | Hank   |  28.3 | team1
+  6 | CJ     |  20.3 | team6
+  2 | Tim    |  30.2 | team2
+  5 | Alice  |  21.1 | team5
+
+> select * from users order by random() limit 1;
+ id | player | score | team  
+----+--------+-------+-------
+  2 | Tim    |  30.2 | team2
+  
+> select * from users order by random() limit 1;
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+
+
