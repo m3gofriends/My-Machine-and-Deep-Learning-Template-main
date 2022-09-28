@@ -1,0 +1,64 @@
+sudo su postgres
+psql testdb
+> \d users;
+> alter table users add fullname varchar(255); #改變user這個Table，新增一個column名為fullname，類型為varchar(255)
+ALTER TABLE
+
+> select * from users;
+ id | player | score | team  | fullname 
+----+--------+-------+-------+----------
+  3 | Chris  |  24.5 | team3 | 
+  4 | Joy    |  23.4 | team4 | 
+  5 | Alice  |  21.1 | team5 | 
+
+> alter table users drop fullname; #改變users這個Table，丟掉名為fullname這個column
+ALTER TABLE
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  
+> alter table users rename player to nab_player; #改變users這個Table，將player更名為nab_player
+ALTER TABLE
+
+> select * from users;
+ id | nab_player | score | team  
+----+------------+-------+-------
+  3 | Chris      |  24.5 | team3
+  4 | Joy        |  23.4 | team4
+  5 | Alice      |  21.1 | team5
+
+> alter table users alter nab_player type varchar(100); #改變users這個Table，將nab_player的類型改為varchar(100)
+ALTER TABLE
+
+> create index nab_player_index on users(nab_player); #創造一個名為nab_player_index的索引到users這個Table的nab_player上(可加快搜尋nab_player的速度)
+CREATE INDEX
+
+> \d users;
+                                      Table "public.users"
+   Column   |          Type          | Collation | Nullable |              Default              
+------------+------------------------+-----------+----------+-----------------------------------
+ id         | integer                |           | not null | nextval('users_id_seq'::regclass)
+ nab_player | character varying(100) |           | not null | 
+ score      | real                   |           |          | 
+ team       | character varying(255) |           |          | 
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (id)
+    "nab_player_index" btree (nab_player) #新增的索引在這
+
+> drop index nab_player_index; #刪除nab_player_index這個索引
+DROP INDEX
+
+> \d users;
+                                      Table "public.users"
+   Column   |          Type          | Collation | Nullable |              Default              
+------------+------------------------+-----------+----------+-----------------------------------
+ id         | integer                |           | not null | nextval('users_id_seq'::regclass)
+ nab_player | character varying(100) |           | not null | 
+ score      | real                   |           |          | 
+ team       | character varying(255) |           |          | 
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (id)
