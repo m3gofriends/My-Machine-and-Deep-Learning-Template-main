@@ -1,0 +1,100 @@
+sudo su postgres
+dropdb testdb #刪除testdb資料庫
+createdb testdb #創建testdb資料庫
+----------------------------------------------------
+nano init.db
+
+create table users (
+    id serial primary key,
+    player varchar(255) not null,
+    score real, 
+    team varchar(255)
+);
+
+insert into users (player, score, team) values
+('Hank', 28.3, 'team1'),
+('Tim', 30.2, 'team2'),
+('Chris', 24.5, 'team3'),
+('Joy', 23.4, 'team4'),
+('Alice', 21.1, 'team5'),
+('CJ', 20.3, 'team6');
+
+create table twitters (
+    id serial primary key,
+    user_id integer,
+    content varchar(255) not null
+);
+
+insert into twitters (user_id, content) values
+(1, 'Hello, World!'),
+(2, 'Good game'),
+(3, 'Happy tiem'),
+(4, 'I good!'),
+(5, '777'),
+(6, 'Nothing');
+----------------------------------------------------
+psql testdb
+> \dt
+         Object descriptions
+ Schema | Name | Object | Description 
+--------+------+--------+-------------
+(0 rows)
+
+> \i init.sql 
+CREATE TABLE
+INSERT 0 6
+CREATE TABLE
+INSERT 0 6
+
+> \dt
+          List of relations
+ Schema |   Name   | Type  |  Owner   
+--------+----------+-------+----------
+ public | twitters | table | postgres
+ public | users    | table | postgres
+(2 rows)
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+
+> select * from twitters;
+ id | user_id |    content    
+----+---------+---------------
+  1 |       1 | Hello, World!
+  2 |       2 | Good game
+  3 |       3 | Happy tiem
+  4 |       4 | I good!
+  5 |       5 | 777
+  6 |       6 | Nothing
+
+> select users.player, twitters.content from users, twitters where users.id = twitters.user_id; #用users.id = twitters.user_id把兩個Table關聯起來
+ player |    content    
+--------+---------------
+ Hank   | Hello, World!
+ Tim    | Good game
+ Chris  | Happy tiem
+ Joy    | I good!
+ Alice  | 777
+ CJ     | Nothing
+
+> select u.player, t.content from users as u, twitters as t where u.id = t.user_id; #把表名縮寫，但功能同上
+ player |    content    
+--------+---------------
+ Hank   | Hello, World!
+ Tim    | Good game
+ Chris  | Happy tiem
+ Joy    | I good!
+ Alice  | 777
+ CJ     | Nothing
+
+> select u.player, t.content from users as u, twitters as t where u.id = t.user_id and u.id = 1; #取出符合u.id = 1條件的數據
+ player |    content    
+--------+---------------
+ Hank   | Hello, World!
