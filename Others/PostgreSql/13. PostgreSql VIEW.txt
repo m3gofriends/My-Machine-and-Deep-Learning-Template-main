@@ -1,0 +1,39 @@
+sudo su postgres
+psql testdb
+> select u.player, t.content from users as u, twitters as t where u.id = t.user_id and u.id = 1;
+ player |    content    
+--------+---------------
+ Hank   | Hello, World!
+ 
+ #view的功能相當於把後面的指令濃縮起來，每次只需要呼叫自己定義的view名稱就可以省略打後面一大串指令
+> create view view_player as select u.player, t.content from users as u, twitters as t where u.id = t.user_id and u.id = 1;
+CREATE VIEW
+
+> \dv
+           List of relations
+ Schema |    Name     | Type |  Owner   
+--------+-------------+------+----------
+ public | view_player | view | postgres
+ 
+> \d view_player 
+                     View "public.view_player"
+ Column  |          Type          | Collation | Nullable | Default 
+---------+------------------------+-----------+----------+---------
+ player  | character varying(255) |           |          | 
+ content | character varying(255) |           |          | 
+
+> select * from view_player; #view的呼叫方式，這樣就可以跟最上面的指令做一樣的事情
+ player |    content    
+--------+---------------
+ Hank   | Hello, World!
+
+> drop view view_player; #丟掉view
+DROP VIEW
+
+> \dv
+Did not find any relations.
+
+> select * from view_player; #因為丟掉了view_player這個view，所以報錯
+ERROR:  relation "view_player" does not exist
+LINE 1: select * from view_player;
+                      ^
