@@ -1,0 +1,59 @@
+mongo
+> help
+> exit
+mongo
+> show dbs; #顯示當前所存在的數據庫
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+> use testdb; #切換到testdb數據庫，如果沒有該數據庫的話會建立一個，有的話則切換
+switched to db testdb
+
+> show collections; #查看當前集合
+
+> db.createCollection("posts"); #建立名為posts的集合，類似SQL的Table
+{ "ok" : 1 }
+
+> db.createCollection("categories");
+{ "ok" : 1 }
+
+> db.createCollection("tags");
+{ "ok" : 1 }
+
+> show collections;
+categories
+posts
+tags
+
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+testdb  0.000GB
+
+> db.stats() #查看該數據庫的詳細資訊
+{
+	"db" : "testdb",
+	"collections" : 3,
+	"views" : 0,
+	"objects" : 0,
+	"avgObjSize" : 0,
+	"dataSize" : 0,
+	"storageSize" : 12288,
+	"indexes" : 3,
+	"indexSize" : 12288,
+	"totalSize" : 24576,
+	"scaleFactor" : 1,
+	"fsUsedSize" : 18803236864,
+	"fsTotalSize" : 83424108544,
+	"ok" : 1
+}
+
+> db.dropDatabase(); #丟棄該數據庫
+{ "dropped" : "testdb", "ok" : 1 }
+
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
