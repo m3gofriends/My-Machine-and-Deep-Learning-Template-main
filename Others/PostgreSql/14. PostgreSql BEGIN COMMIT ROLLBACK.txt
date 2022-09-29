@@ -1,0 +1,64 @@
+begin;
+#確保裡面的事物被同時被操作，直到指令commit前內容物都不會改變，中途可反悔
+commit;
+
+begin;
+#突然覺得不想更新了，此時可用rollback進行取消動作，內容全都回到begin之前
+rollback;
+----------------------------------------------------------
+sudo su postgres
+psql testdb
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  1 | Hank   |  28.3 | team1
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  5 | Alice  |  21.1 | team5
+  6 | CJ     |  20.3 | team6
+----------------------------------------------------------
+>begin;
+BEGIN
+
+> update users set score = 1000 where player = 'Hank';
+UPDATE 1
+
+> update users set score = 500 where player = 'Alice';
+UPDATE 1
+
+> commit;
+COMMIT
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  6 | CJ     |  20.3 | team6
+  1 | Hank   |  1000 | team1
+  5 | Alice  |   500 | team5
+----------------------------------------------------------
+>begin;
+BEGIN
+
+> update users set score = 0 where player = 'Hank';
+UPDATE 1
+
+> update users set score = 0 where player = 'Alice';
+UPDATE 1
+
+> rollback;
+ROLLBACK
+
+> select * from users;
+ id | player | score | team  
+----+--------+-------+-------
+  2 | Tim    |  30.2 | team2
+  3 | Chris  |  24.5 | team3
+  4 | Joy    |  23.4 | team4
+  6 | CJ     |  20.3 | team6
+  1 | Hank   |  1000 | team1
+  5 | Alice  |   500 | team5
+----------------------------------------------------------
