@@ -1,0 +1,52 @@
+mongo
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+> use testdb;
+switched to db testdb
+
+> show dbs; #因為testdb沒有Collection，所以show dbs還是看不到該數據庫
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+> db.createCollection("users");
+{ "ok" : 1 }
+
+> show dbs; #因為testdb有users這個Collection了，所以show dbs看的到該數據庫
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+testdb  0.000GB
+
+> show collections;
+users
+
+> db.users.find(); #類似SQL裡面的select * from users;
+
+> db.users.renameCollection("staff"); #把users這個Collection重新命名為staff
+{ "ok" : 1 }
+
+> show collections;
+staff
+
+> db.staff.drop(); #丟掉staff這個Collection
+true
+
+> show collections;
+
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
+> db.dropDatabase(); #丟掉testdb這個資料庫
+{ "dropped" : "testdb", "ok" : 1 }
+
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+
