@@ -1,0 +1,50 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> show collections;
+
+> db.createCollection("posts");
+{ "ok" : 1 }
+
+> show collections;
+posts
+
+> db.posts.insert( { title:"My first blog.", content: "I am happy." } );
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.find();
+{ "_id" : ObjectId("633678979fb71d6efabd0437"), "title" : "My first blog.", "content" : "I am happy." }
+
+> db.posts.insert( { title:"My first blog.", content: "I am happy.", tag:["None"] } );
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.find();
+{ "_id" : ObjectId("633678979fb71d6efabd0437"), "title" : "My first blog.", "content" : "I am happy." }
+{ "_id" : ObjectId("6336790e9fb71d6efabd0438"), "title" : "My first blog.", "content" : "I am happy.", "tag" : [ "None" ] }
+
+> for(var i=3; i <= 10; i++){ db.posts.insert({ title: "My " + i + " blog." }); } #MongoDB支援JavaScript語法
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.find();
+{ "_id" : ObjectId("633678979fb71d6efabd0437"), "title" : "My first blog.", "content" : "I am happy." }
+{ "_id" : ObjectId("6336790e9fb71d6efabd0438"), "title" : "My first blog.", "content" : "I am happy.", "tag" : [ "None" ] }
+{ "_id" : ObjectId("63367abb9fb71d6efabd0439"), "title" : "My 3 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd043a"), "title" : "My 4 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd043b"), "title" : "My 5 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd043c"), "title" : "My 6 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd043d"), "title" : "My 7 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd043e"), "title" : "My 8 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd043f"), "title" : "My 9 blog." }
+{ "_id" : ObjectId("63367abb9fb71d6efabd0440"), "title" : "My 10 blog." }
+
+> db.posts.count();
+10
+
+> db.posts.remove({}); #移除全部的Document
+WriteResult({ "nRemoved" : 10 })
+
+> db.posts.count();
+0
+
+> db.posts.find();
