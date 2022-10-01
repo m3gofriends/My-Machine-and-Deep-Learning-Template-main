@@ -1,0 +1,74 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> db.posts.remove({}); #移除posts所有內容
+WriteResult({ "nRemoved" : 0 })
+
+> db.posts.insert({title:"Happy", rank:2, tag:"game"});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.insert({title:"Happy2", rank:1, tag:"game"});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.insert({title:"Linux", rank:3, tag:"OS"});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.insert({title:"Happy3", rank:4, tag:"game"});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.insert({title:"Python", rank:5, tag:"it"});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.insert({title:"C++", rank:5, tag:"it"});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.find(); #找全部
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({tag:"game"}); #找tag為"game"
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+
+> db.posts.find({rank: {$gte: 4}}); #找rank>=4
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({rank: {$gt: 4}}); #找rank>4
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({rank: {$lte: 4}}); #找rank<=4
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+
+> db.posts.find({rank: {$lt: 4}}); #找rank<4
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+
+> db.posts.find({"title": /y/}); #找title包含y這個字
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({"title": /^H/}); #找title以H開頭
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+
+> db.posts.find({"title": /^P/}); #找title以P開頭
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+
+> db.posts.distinct("tag"); #找所有tag名稱
+[ "OS", "game", "it" ]
