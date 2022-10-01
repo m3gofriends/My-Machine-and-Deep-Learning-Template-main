@@ -1,0 +1,43 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> db.posts.find()
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({"title": /y/, "rank": {$gte:3}}); #找title包含y這個字且rank>=3
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({$or: [{"title": /y/}, {"rank": {$gte:3}}] }); #找title包含y這個字或rank>=3
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({"rank": {$in: [4,5]} }); #找rank等於4或5
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.insert({"title": "Book", "istop":true});
+WriteResult({ "nInserted" : 1 })
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.find({"istop": {$exists: true} }); #找istop為true
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
