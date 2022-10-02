@@ -1,0 +1,69 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.find({}, {_id:0}).sort({rank:1}); #rank升序排序，小->大
+{ "title" : "Book", "istop" : true }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "title" : "C++", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({}, {_id:0}).sort({rank:-1}); #rank降序排序，大->小
+{ "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.find({}, {_id:0}).limit(3);
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+
+> db.posts.find({}, {_id:0}).limit(5);
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 5, "tag" : "it" }
+
+> db.posts.find({}, {_id:0}).sort({rank:-1}).limit(3);
+{ "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+
+> db.posts.findOne({}, {_id:0}); #只回傳一個數據
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+
+> db.posts.find({}, {_id:0});
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.find({}, {_id:0}).limit(3);
+{ "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+
+> db.posts.find({}, {_id:0}).skip(3).limit(3); #先跳過3個數據，再取3個數據
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "title" : "C++", "rank" : 5, "tag" : "it" }
