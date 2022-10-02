@@ -1,0 +1,76 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 3, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.findOne({"title": "Happy"});
+{
+	"_id" : ObjectId("6337bd7beda6e9117a53364d"),
+	"title" : "Happy",
+	"rank" : 3
+}
+
+> db.posts.update({"title": "Happy"}, {$set: {"rank": 70}} ); #找到title為Happy的文檔，並設置其rank為70
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.findOne({"title": "Happy"});
+{
+	"_id" : ObjectId("6337bd7beda6e9117a53364d"),
+	"title" : "Happy",
+	"rank" : 70
+}
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 70, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.update({"title": "Happy"}, {"rank": 999} ); #找到title為Happy的文檔，並將其全部內容更改為{"rank": 999}
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.findOne({"title": "Happy"}); #因為沒有title為Happy的文檔，所以回傳null
+null
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "rank" : 999 } #文檔被更改為{"rank": 999}
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.update({"tag": "it"}, {$set: {"rank": 50}}); #MongoDB默認只會更新一條數據
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "rank" : 999 }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 50, "tag" : "it" } #只有第一筆出現的會被更改
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" } #tag也是it，但rank不是50
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.update({"tag": "it"}, {$set: {"rank": 90}}, {multi: true}); #可以用{multi: true}讓符合條件的全部更改
+WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "rank" : 999 }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 90, "tag" : "it" } #rank為90
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 90, "tag" : "it" } #rank為90
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
