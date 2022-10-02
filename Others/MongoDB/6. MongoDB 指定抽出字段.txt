@@ -1,0 +1,28 @@
+mongo
+use testdb;
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2, "tag" : "game" }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.find({}, {title:true, rank:1}); #其實true跟1的意思都一樣，都表示要抽出該字段
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "title" : "Happy", "rank" : 2 }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "rank" : 1 }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3 }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4 }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 5 }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 5 }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book" }
+
+> db.posts.find({}, {title:true, rank:1, _id:0}); #_id:0表示不抽出_id該字段
+{ "title" : "Happy", "rank" : 2 }
+{ "title" : "Happy2", "rank" : 1 }
+{ "title" : "Linux", "rank" : 3 }
+{ "title" : "Happy3", "rank" : 4 }
+{ "title" : "Python", "rank" : 5 }
+{ "title" : "C++", "rank" : 5 }
+{ "title" : "Book" }
