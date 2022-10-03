@@ -1,0 +1,62 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> db.posts.find({}, {_id: false});
+{ "rank" : 10 }
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "rank" : 1, "tag" : "game" }
+
+> db.posts.update({title: "Happy2"}, {$inc: {rank: 1}}); #Happy2裡面的rank值加1
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "rank" : 2, "tag" : "game" }
+
+> db.posts.update({title: "Happy2"}, {$inc: {rank: 10}}); #Happy2裡面的rank值加10
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "rank" : 12, "tag" : "game" }
+
+> db.posts.update({title: "Happy2"}, {$mul: {rank: 2}}); #Happy2裡面的rank值乘2
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "rank" : 24, "tag" : "game" }
+
+> db.posts.update({title: "Happy2"}, {$rename: {"rank": "score"}}); #Happy2裡面的rank更名為score
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+
+> db.posts.find();
+{ "_id" : ObjectId("6337bd7beda6e9117a53364d"), "rank" : 10 }
+{ "_id" : ObjectId("6337bdadeda6e9117a53364e"), "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "_id" : ObjectId("6337bdc7eda6e9117a53364f"), "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "_id" : ObjectId("6337bdd9eda6e9117a533650"), "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "_id" : ObjectId("6337bdfbeda6e9117a533651"), "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "_id" : ObjectId("6337be19eda6e9117a533652"), "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "_id" : ObjectId("6337c679e66d607c45196774"), "title" : "Book", "istop" : true }
+
+> db.posts.update({title: "Happy2"}, {$set: {"istop": true}}); #Happy2裡面的istop設定為true，如果istop不存在，那就當場建立一個
+
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "tag" : "game", "score" : 24, "istop" : true }
+
+> db.posts.update({title: "Happy2"}, {$unset: {"istop": true}}); #刪除Happy2裡面istop為true的資料
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({title: "Happy2"}, {_id: 0});
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+
