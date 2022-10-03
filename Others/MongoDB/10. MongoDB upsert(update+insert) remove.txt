@@ -1,0 +1,68 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.update({title: "Happy777"}, {title: "Happy777", rank: 7, tag: "game"}); #如果Happy777不存在，則什麼都不會發生
+WriteResult({ "nMatched" : 0, "nUpserted" : 0, "nModified" : 0 }) #沒有match到，沒有upsert，沒有modify
+
+> db.posts.find({}, {_id: 0}); #什麼都沒有改變
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.update({title: "Happy777"}, {title: "Happy777", rank: 7, tag: "game"}, {upsert: true}); #因為開啟upsert，所以如果Happy777不存在就原地建立
+WriteResult({
+	"nMatched" : 0,
+	"nUpserted" : 1,
+	"nModified" : 0,
+	"_id" : ObjectId("633a749209ad84df879b61b6")
+})
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+{ "title" : "Happy777", "rank" : 7, "tag" : "game" }
+
+> db.posts.update({title: "Happy777"}, {title: "Happy777", rank: 999, tag: "game"}, {upsert: true});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+{ "title" : "Happy777", "rank" : 999, "tag" : "game" }
+
+> db.posts.remove({title: "Happy777"}); #移除Happy777那條數據
+WriteResult({ "nRemoved" : 1 })
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
