@@ -1,0 +1,70 @@
+mongo
+> use testdb;
+switched to db testdb
+
+> show dbs;
+admin   0.000GB
+config  0.000GB
+local   0.000GB
+testdb  0.000GB
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> exit
+bye
+
+mkdir dbbackup
+cd dbbackup/
+
+mongodump -d testdb #備份testdb裡面的內容
+2022-10-04T13:17:49.259+0800	writing testdb.posts to dump/testdb/posts.bson
+2022-10-04T13:17:49.262+0800	done dumping testdb.posts (7 documents)
+
+mongo testdb
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.remove({});
+WriteResult({ "nRemoved" : 7 })
+
+> db.posts.find({}, {_id: 0});
+
+> exit
+bye
+
+mongorestore --drop #恢復testdb裡面的內容
+2022-10-04T13:21:51.026+0800	using default 'dump' directory
+2022-10-04T13:21:51.027+0800	preparing collections to restore from
+2022-10-04T13:21:51.027+0800	reading metadata for testdb.posts from dump/testdb/posts.metadata.json
+2022-10-04T13:21:51.029+0800	dropping collection testdb.posts before restoring
+2022-10-04T13:21:51.066+0800	restoring testdb.posts from dump/testdb/posts.bson
+2022-10-04T13:21:51.079+0800	finished restoring testdb.posts (7 documents, 0 failures)
+2022-10-04T13:21:51.079+0800	restoring indexes for collection testdb.posts from metadata
+2022-10-04T13:21:51.080+0800	index: &idx.IndexDocument{Options:primitive.M{"name":"title_1", "unique":true, "v":2}, Key:primitive.D{primitive.E{Key:"title", Value:1}}, PartialFilterExpression:primitive.D(nil)}
+2022-10-04T13:21:51.127+0800	7 document(s) restored successfully. 0 document(s) failed to restore.
+
+mongo testdb #快速進入testdb的方式
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
