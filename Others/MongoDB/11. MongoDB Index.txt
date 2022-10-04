@@ -1,0 +1,84 @@
+mongo
+use testdb;
+> use testdb;
+switched to db testdb
+
+> db.posts.getIndexes(); #獲得posts這個Collection的所有索引
+[ { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_" } ] #MongoDB默認會為_id建立一個索引
+
+> db.posts.createIndex({rank: -1}); #以rank降序的方式做個索引
+{
+	"createdCollectionAutomatically" : false,
+	"numIndexesBefore" : 1,
+	"numIndexesAfter" : 2,
+	"ok" : 1
+}
+
+> db.posts.getIndexes();
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_"
+	},
+	{
+		"v" : 2,
+		"key" : {
+			"rank" : -1
+		},
+		"name" : "rank_-1"
+	}
+]
+
+> db.posts.dropIndex({rank: -1}); #丟掉以rank降序方式的索引
+{ "nIndexesWas" : 2, "ok" : 1 }
+
+> db.posts.getIndexes();
+[ { "v" : 2, "key" : { "_id" : 1 }, "name" : "_id_" } ]
+
+> db.posts.createIndex({title: 1}, {unique: true}); #以title升序的方式做個索引，另外unique: true表示名稱唯一不許重複，類似SQL裡面的primary key(主鍵)
+{
+	"createdCollectionAutomatically" : false,
+	"numIndexesBefore" : 1,
+	"numIndexesAfter" : 2,
+	"ok" : 1
+}
+
+> db.posts.getIndexes();
+[
+	{
+		"v" : 2,
+		"key" : {
+			"_id" : 1
+		},
+		"name" : "_id_"
+	},
+	{
+		"v" : 2,
+		"unique" : true,
+		"key" : {
+			"title" : 1
+		},
+		"name" : "title_1"
+	}
+]
+
+> db.posts.find({}, {_id: 0});
+{ "rank" : 10 }
+{ "title" : "Happy2", "tag" : "game", "score" : 24 }
+{ "title" : "Linux", "rank" : 3, "tag" : "OS" }
+{ "title" : "Happy3", "rank" : 4, "tag" : "game" }
+{ "title" : "Python", "rank" : 90, "tag" : "it" }
+{ "title" : "C++", "rank" : 90, "tag" : "it" }
+{ "title" : "Book", "istop" : true }
+
+> db.posts.insert({title: "Happy2"}); #因為unique: true，所以不允許title重複名稱，故報錯
+WriteResult({
+	"nInserted" : 0,
+	"writeError" : {
+		"code" : 11000,
+		"errmsg" : "E11000 duplicate key error collection: testdb.posts index: title_1 dup key: { title: \"Happy2\" }"
+	}
+})
