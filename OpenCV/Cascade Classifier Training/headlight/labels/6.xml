@@ -1,0 +1,26 @@
+<annotation>
+	<folder>headlight</folder>
+	<filename>6.jpg</filename>
+	<path>D:\Desktop\headlight\6.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>612</width>
+		<height>408</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>headlight</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>264</xmin>
+			<ymin>196</ymin>
+			<xmax>446</xmax>
+			<ymax>231</ymax>
+		</bndbox>
+	</object>
+</annotation>
